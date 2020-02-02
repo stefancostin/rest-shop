@@ -1,3 +1,4 @@
+const bodyParser = require('body-parser');
 const express = require('express');
 const morgan = require('morgan');
 
@@ -6,21 +7,39 @@ const orderRoutes = require('./src/api/routes/orders');
 
 const app = express();
 
-// Classic Middleware
-// app.use((req, resp, next) => {
-//   resp.status(200).json({
-//     message: 'It works!'
-//   });
-// });
+/**
+ * Middleware for logging and parsing requests
+ * The objects themselves call next()
+ */
 app.use(morgan('dev'));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-// Middleware
-// Format: app.use(FILTER, ROUTES)
+console.log(morgan)
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 
+  'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+
+  if (req.method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Methods', 
+    'PUT, POST, PATCH, DELETE, GET');
+    return res.status(200).json({});
+  }
+
+  next();
+});
+
+/**
+ * Middleware for API Routes 
+ * Format: (FILTER, ROUTES)
+ */
 app.use('/products', productRoutes);
 app.use('/orders', orderRoutes);
 
 /**
- * Error Handling - Creating the 404 Error
+ * Error Handling - Route not matched
  */
 app.use((req, res, next) => {
   const error = new Error('Resource not found.');
