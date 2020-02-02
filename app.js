@@ -1,11 +1,16 @@
 const bodyParser = require('body-parser');
 const express = require('express');
+const mongoose = require('mongoose');
 const morgan = require('morgan');
 
 const productRoutes = require('./src/api/routes/products');
 const orderRoutes = require('./src/api/routes/orders');
 
 const app = express();
+
+mongoose.connect('mongodb+srv://admin:root' +
+  '@mongo-cluster-mcavq.mongodb.net/test?retryWrites=true&w=majority',
+  { useNewUrlParser: true, useUnifiedTopology: true });
 
 /**
  * Middleware for logging and parsing requests
@@ -15,16 +20,14 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-console.log(morgan)
-
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 
-  'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization');
 
   if (req.method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Methods', 
-    'PUT, POST, PATCH, DELETE, GET');
+    res.header('Access-Control-Allow-Methods',
+      'PUT, POST, PATCH, DELETE, GET');
     return res.status(200).json({});
   }
 
