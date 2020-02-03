@@ -6,10 +6,26 @@ const Product = require('../models/product');
 
 router.get('/', (req, res, next) => {
   Product.find()
+    .select('name price _id')
     .exec()
     .then(docs => {
+
+      const response = {
+        count: docs.length,
+        products: docs.map(doc => {
+          return {
+            name: doc.name,
+            price: doc.price,
+            request: {
+              method: 'GET',
+              url: 'http://localhost:3000/products/' + doc._id,
+            }
+          };
+        })
+      }
+
       if (docs && docs.length) {
-        res.status(200).json({ products: docs });
+        res.status(200).json(response);
       } else {
         res.status(404).json({ message: 'No entries found.' })
       }
@@ -62,25 +78,25 @@ router.patch('/:productId', (req, res, next) => {
   }
 
   Product.update({ _id: id }, { $set: updateOps })
-  .exec()
-  .then(result => {
-    res.status(200).json({ operation: result });
-  })
-  .catch(err => {
-    res.status(404).json({ error: err });
-  })
+    .exec()
+    .then(result => {
+      res.status(200).json({ operation: result });
+    })
+    .catch(err => {
+      res.status(404).json({ error: err });
+    })
 });
 
 router.delete('/:productId', (req, res, next) => {
   const id = req.params.productId;
   Product.remove({ _id: id })
-  .exec()
-  .then(res => {
-    res.status(200).json(result);
-  })
-  .catch(err => {
-    res.status(500).json({ error: err });
-  });
+    .exec()
+    .then(res => {
+      res.status(200).json(result);
+    })
+    .catch(err => {
+      res.status(500).json({ error: err });
+    });
 });
 
 module.exports = router;
