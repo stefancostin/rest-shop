@@ -17,6 +17,7 @@ mongoose.connect('mongodb+srv://admin:root' +
  * The objects themselves call next()
  */
 app.use(morgan('dev'));
+app.use('uploads/', express.static('uploads'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
