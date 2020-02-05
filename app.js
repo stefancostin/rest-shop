@@ -5,6 +5,7 @@ const morgan = require('morgan');
 
 const productRoutes = require('./src/api/routes/products');
 const orderRoutes = require('./src/api/routes/orders');
+const userRoutes = require('./src/api/routes/users');
 
 const app = express();
 
@@ -41,6 +42,7 @@ app.use((req, res, next) => {
  */
 app.use('/products', productRoutes);
 app.use('/orders', orderRoutes);
+app.use('/users', userRoutes);
 
 /**
  * Error Handling - Route not matched
