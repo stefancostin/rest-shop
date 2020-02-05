@@ -6,6 +6,22 @@ const bcrypt = require('bcrypt');
 const User = require('../models/user');
 
 router.post('/signup', (req, res, next) => {
+
+  // check that the user doesn't already exist
+  User.find({ email: req.body.email })
+  .exec()
+  .then(user => {
+    if (user) {
+      return res.status(409).json({
+        message: 'User is already in the database.'
+      });
+    }
+  })
+  .catch(err => {
+    res.status(500).json({ error: err });
+  })
+
+  // hash password and save user in the database
   bcrypt.hash(req.body.password, 10, (err, hash) => {
     if (err) {
       return res.status(500).json({ error: err });
