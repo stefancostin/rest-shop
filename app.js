@@ -3,13 +3,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 
+const config = require('./src/config.json');
 const productRoutes = require('./src/api/routes/products');
 const orderRoutes = require('./src/api/routes/orders');
 const userRoutes = require('./src/api/routes/users');
 
 const app = express();
 
-mongoose.connect('mongodb+srv://admin:root' +
+mongoose.connect('mongodb+srv://admin:' + config.MONGO_ATLAS_PWD +
   '@mongo-cluster-mcavq.mongodb.net/test?retryWrites=true&w=majority',
   { useNewUrlParser: true, useUnifiedTopology: true });
 

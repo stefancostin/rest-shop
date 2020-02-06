@@ -1,0 +1,4 @@
+{
+    "MONGO_ATLAS_PWD": "root",
+    "JWT_KEY": "secret"
+}
