@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
 const multer = require('multer');
 const auth = require('../middleware/auth');
 
@@ -30,16 +29,16 @@ const upload = multer({
   }
 });
 
-const ProductsController = require('../controllers/products');
+const ProductController = require('../controllers/products');
 
-router.get('/', ProductsController.getAllProducts);
+router.get('/', ProductController.getAllProducts);
 
-router.get('/:productId', ProductsController.getProduct);
+router.get('/:productId', ProductController.getProduct);
 
-router.post('/', auth, upload.single('productImage'), ProductsController.createProduct);
+router.post('/', auth, upload.single('productImage'), ProductController.createProduct);
 
-router.patch('/:productId', auth, upload.single('productImage'), ProductsController.updateProduct);
+router.patch('/:productId', auth, upload.single('productImage'), ProductController.updateProduct);
 
-router.delete('/:productId', auth, ProductsController.deleteProduct);
+router.delete('/:productId', auth, ProductController.deleteProduct);
 
 module.exports = router;
